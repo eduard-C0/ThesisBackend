@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -91,6 +92,18 @@ public class UserServiceImplementation implements IUserService{
         mailSender.send(message);
 
     }
+    @Transactional
+    public String verify (String verificationCode){
+        User user = userRepository.findByVerificationCode(verificationCode);
 
+        if (user == null || user.getEnabled()) {
+            return "<h3>Your email is already confirmed!</h3>";
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userRepository.save(user);
+            return "<h3>Your email is confirmed. Thank you for using our service!</h3>";
+        }
+    }
 
 }

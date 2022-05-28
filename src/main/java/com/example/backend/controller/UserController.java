@@ -8,6 +8,7 @@ import com.example.backend.service.user.UserServiceImplementation;
 import com.example.backend.utils.enums.AppRoles;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,14 @@ public class UserController {
 
     @PostMapping({"/createUser"})
     public ResponseEntity<ResponseMessage> addUser(@RequestBody UserDto user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-        ResponseMessage responseMessage = new ResponseMessage("","");
+        ResponseMessage responseMessage = new ResponseMessage("", "");
         System.out.println("here");
-        UserDto savedUser = userService.saveUser(user,getSiteURL(request));
-        if(savedUser == null) {
+        UserDto savedUser = userService.saveUser(user, getSiteURL(request));
+        if (savedUser == null) {
             System.out.println("Existing user!");
             responseMessage.setMessage("Existing user!");
             responseMessage.setCode("400");
-            return new ResponseEntity<>(responseMessage,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         System.out.println("Account created successfully");
         responseMessage.setMessage("Account created successfully");
@@ -66,11 +67,11 @@ public class UserController {
 
     @GetMapping({"/getUser"})
     public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String token) {
-            User user = jwtTokenService.getUserFromToken(token);
-            if(user == null)
-                return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-            UserDto userDto = userMapper.toService(user);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        User user = jwtTokenService.getUserFromToken(token);
+        if (user == null)
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        UserDto userDto = userMapper.toService(user);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     private String getSiteURL(HttpServletRequest request) {
