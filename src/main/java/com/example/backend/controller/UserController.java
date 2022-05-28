@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,22 +47,24 @@ public class UserController {
         return new ResponseEntity<>(responseMessage, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/login", produces = "text/plain")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @SneakyThrows
-    public ResponseEntity<String> login(@RequestBody UserDto userPasswordDto) {
-
+    public ResponseEntity<ResponseMessage> login(@RequestBody UserDto userPasswordDto) {
+        ResponseMessage responseMessage = new ResponseMessage("", "");
         UserDto user = userService.findUser(userPasswordDto);
         String jwt;
-        System.out.println(user.getEmail());
-        System.out.println(user.getPassword());
-        if (Objects.isNull(user))
-            return ResponseEntity.internalServerError().body("Incorrect email!");
-        else {
-            if (Objects.isNull(user.getPassword()))
-                return ResponseEntity.internalServerError().body("Incorrect password!");
-            else
+        if (Objects.isNull(user)) {
+            responseMessage.setMessage("Incorrect email or email was not confirmed!");
+            responseMessage.setCode("400");
+            return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            if (Objects.isNull(user.getPassword())) {
+                responseMessage.setMessage("Incorrect password!");
+                responseMessage.setCode("400");
+                return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else
                 jwt = jwtTokenService.createJwtToken(user, Collections.singleton(AppRoles.valueOf("USER")));
-            return ResponseEntity.ok(jwt);
+            return ResponseEntity.ok(new ResponseMessage(jwt, "200"));
         }
     }
 

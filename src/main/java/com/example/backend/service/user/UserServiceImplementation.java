@@ -54,7 +54,7 @@ public class UserServiceImplementation implements IUserService{
     public UserDto findUser(UserDto user) {
         User foundUser = userRepository.findByEmail(user.getEmail());
 
-        if(foundUser == null)
+        if(foundUser == null || !foundUser.getEnabled())
             return null;
         else if (!encoder.matches(user.getPassword(), foundUser.getPassword())) {
             foundUser.setPassword(null);
