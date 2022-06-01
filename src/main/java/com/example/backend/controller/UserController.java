@@ -55,13 +55,13 @@ public class UserController {
         String jwt;
         if (Objects.isNull(user)) {
             responseMessage.setMessage("Incorrect email or email was not confirmed!");
-            responseMessage.setCode("404");
-            return new ResponseEntity<>(responseMessage, HttpStatus.CONTINUE);
+            responseMessage.setCode("400");
+            return ResponseEntity.ok(responseMessage);
         } else {
             if (Objects.isNull(user.getPassword())) {
                 responseMessage.setMessage("Incorrect password!");
-                responseMessage.setCode("404");
-                return new ResponseEntity<>(responseMessage, HttpStatus.CONTINUE);
+                responseMessage.setCode("400");
+                return ResponseEntity.ok(responseMessage);
             } else
                 jwt = jwtTokenService.createJwtToken(user, Collections.singleton(AppRoles.valueOf("USER")));
             return ResponseEntity.ok(new ResponseMessage(jwt, "200"));
