@@ -43,7 +43,7 @@ public class TrackServiceImplementation implements ITrackService {
     public Boolean removeTrack(TrackDto trackDto, User user) {
         Track trackEntity = trackMapper.toEntity(trackDto,user);
         try {
-            trackRepository.deleteByTrackId(trackEntity.getId(), user.getId());
+            trackRepository.deleteTrackByIdAndUserId(trackEntity.getId(), user.getId());
             return true;
         } catch (Exception exception) {
             exception.printStackTrace();
