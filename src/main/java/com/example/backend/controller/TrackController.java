@@ -41,7 +41,7 @@ public class TrackController {
         return ResponseEntity.ok(responseMessage);
     }
 
-    @PostMapping({"/getAllFavorites"})
+    @GetMapping({"/getAllFavorites"})
     public List<TrackDto> addTrack(@RequestHeader("Authorization") String token) throws UnsupportedEncodingException, MessagingException {
         User user = jwtTokenService.getUserFromToken(token);
         List<TrackDto> favorites = trackService.getAllTracks(user);
