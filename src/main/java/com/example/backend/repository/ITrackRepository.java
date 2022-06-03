@@ -15,8 +15,8 @@ public interface ITrackRepository extends JpaRepository<Track,Integer> {
     @Query("SELECT t FROM Track t WHERE t.user = ?1")
     List<Track> findByUser(User user);
 
+    @Query("DELETE FROM Track t WHERE t.name=?1 AND t.user.id=?2")
     @Modifying
-    @Query("DELETE FROM Track t WHERE t.name =: trackName AND t.user.id =: userId")
-    void deleteTrackByIdAndUserId(@Param("trackName") String trackName, @Param("userId") int userId);
+    void deleteTrackByNameAndUserId(String trackName, int userId);
 
 }
