@@ -27,7 +27,7 @@ import java.util.Set;
 @Slf4j
 public class JwtTokenService {
 
-    private static final long EXPIRATIONTIME = Duration.ofDays(3).toMillis();
+    private static final long EXPIRATIONTIME = Duration.ofDays(10).toMillis();
     private static final String HEADER_STRING = "app-auth";
     private static final String CLAIM_USER = "user";
     private static final String CLAIM_ROLES = "roles";
