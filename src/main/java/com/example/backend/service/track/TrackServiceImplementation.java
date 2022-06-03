@@ -8,6 +8,7 @@ import com.example.backend.service.mapper.TrackMapperImplementation;
 import com.example.backend.service.mapper.UserMapperImplementation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -38,10 +39,11 @@ public class TrackServiceImplementation implements ITrackService {
     }
 
     @Override
+    @Transactional
     public Boolean removeTrack(TrackDto trackDto, User user) {
         Track trackEntity = trackMapper.toEntity(trackDto,user);
         try {
-            trackRepository.deleteByTrackId(trackEntity.getId());
+            trackRepository.deleteByTrackId(trackEntity.getId(), user.getId());
             return true;
         } catch (Exception exception) {
             exception.printStackTrace();
