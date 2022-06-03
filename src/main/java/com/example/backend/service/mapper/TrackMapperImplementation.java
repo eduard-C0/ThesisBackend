@@ -24,7 +24,7 @@ public class TrackMapperImplementation implements ITrackMapper {
                 .type(entity.getType())
                 .playbackSeconds(entity.getPlaybackSeconds())
                 .previewURL(entity.getPreviewURL())
-                .name(entity.getPreviewURL())
+                .name(entity.getName())
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class TrackMapperImplementation implements ITrackMapper {
                 .type(dto.getType())
                 .playbackSeconds(dto.getPlaybackSeconds())
                 .previewURL(dto.getPreviewURL())
-                .name(dto.getPreviewURL())
+                .name(dto.getName())
                 .user(user)
                 .build();
     }
